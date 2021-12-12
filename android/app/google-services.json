@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "974512821250",
+    "project_id": "plumbicians",
+    "storage_bucket": "plumbicians.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974512821250:android:5479f0637cfae56a27431b",
+        "android_client_info": {
+          "package_name": "com.example.plumbify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974512821250-nu3odbl6midrj88ffjiuvvarn9afernu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.plumbify",
+            "certificate_hash": "bec3d3c2d6d7eb8711a74e65d13aa12b80a5967d"
+          }
+        },
+        {
+          "client_id": "974512821250-dvh2fprqdsupt0hlket7bu81alv0vu53.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlVAdAa8irf3iMTXK_0mvsvfWIGti5R_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974512821250-dvh2fprqdsupt0hlket7bu81alv0vu53.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
