@@ -41,6 +41,7 @@ class _HomeState extends State<Home> {
   // ignore: non_constant_identifier_names
   Widget BuildListTile(String image,String text,Function function){
     return InkWell(
+      onTap: function,
       child: Container(
         height: 150,
         decoration: BoxDecoration(
@@ -159,10 +160,11 @@ class _HomeState extends State<Home> {
                           children: <Widget>[
 
                             BuildListTile('assets/elec.jpg','Hire Electrician',(){
-                              Navigator.of(context).pushNamed(null);}),
+                              Navigator.of(context).pushNamed('electricians');
+                            }),
                             SizedBox(height: 15),
                             BuildListTile('assets/plum.png','Hire Plumber',(){
-                              Navigator.of(context).pushNamed(null);
+                              Navigator.of(context).pushNamed('plumber');
                             }),
                             SizedBox(height: 15),
                             BuildListTile('assets/deals.jpg','Deals',(){

@@ -1,9 +1,11 @@
 import 'package:plumbify/screens/about_us.dart';
+import 'package:plumbify/screens/electrician_homepage.dart';
 import 'package:plumbify/screens/homepage.dart';
 import 'package:plumbify/screens/map_location.dart';
 import 'package:plumbify/screens/notfications.dart';
 import 'package:plumbify/screens/order_history.dart';
 import 'package:plumbify/screens/packages.dart';
+import 'package:plumbify/screens/plumber_homepage.dart';
 import 'package:plumbify/screens/profile.dart';
 import 'package:plumbify/screens/rewards.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +49,8 @@ class HomePage extends StatelessWidget {
         'profile':(context) => Profile(auth: auth),
         'notifications':(context) => Notifications(),
         'location':(context) => Map_location(),
+        'electricians':(context) => ElectricianHome(),
+        'plumber':(context) => PlumberHome()
 
       },
     );
