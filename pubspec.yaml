@@ -66,6 +66,7 @@ flutter:
     - assets/deals.jpg
     - assets/elec.jpg
     - assets/plum.png
+    - assets2/images/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
