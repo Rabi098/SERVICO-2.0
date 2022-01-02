@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -7,6 +8,7 @@ class Packages extends StatefulWidget {
 }
 
 class _PackagesState extends State<Packages> {
+  final Stream<QuerySnapshot> users = FirebaseFirestore.instance.collection("Packages").snapshots();
   final CategoriesScroller categoriesScroller = CategoriesScroller();
   ScrollController controller = ScrollController();
   bool closeTopContainer = false;
@@ -47,58 +49,14 @@ class _PackagesState extends State<Packages> {
   ];
 
   void getPostsData() {
-    List<dynamic> responseList = Package_data;
-    List<Widget> listItems = [];
-    responseList.forEach((post) {
-      listItems.add(Container(
-          height: 150,
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20.0)), color: Colors.white, boxShadow: [
-            BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
-          ]),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      post["name"],
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      post["brand"],
-                      style: const TextStyle(fontSize: 13, color: Colors.grey),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "\Rs ${post["price"]}",
-                      style: const TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-                Image.asset(
-                  "assets2/images/${post["image"]}",
-                  height: double.infinity,
-                  width: 100,
-                )
-              ],
-            ),
-          )));
-    });
-    setState(() {
-      itemsData = listItems;
-    });
+
+
   }
 
   @override
   void initState() {
     super.initState();
-    getPostsData();
+    //getPostsData();
     controller.addListener(() {
 
       double value = controller.offset/119;
@@ -135,52 +93,105 @@ class _PackagesState extends State<Packages> {
           ],
         ),
         body: Container(
-          height: size.height,
-          child: Column(
-            children: <Widget>[
+            height: size.height,
+            child: StreamBuilder<QuerySnapshot>(
+                stream: users,
+                builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if(snapshot.hasError){
+                    return Text("Something went wrong");
+                  }
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return Text("Loading");
+                  }
+                  final data = snapshot.requireData;
+                  //print(data.docs[0]['Title']);
+                  return Column(
+                    children: <Widget>[
 
-              const SizedBox(
-                height: 10,
-              ),
-              AnimatedOpacity(
-                duration: const Duration(milliseconds: 200),
-                opacity: closeTopContainer?0:1,
-                child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    width: size.width,
-                    alignment: Alignment.topCenter,
-                    height: closeTopContainer?0:categoryHeight,
-                    child: categoriesScroller),
-              ),
-              Expanded(
-                  child: ListView.builder(
-                      controller: controller,
-                      itemCount: itemsData.length,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        double scale = 1.0;
-                        if (topContainer > 0.5) {
-                          scale = index + 0.5 - topContainer;
-                          if (scale < 0) {
-                            scale = 0;
-                          } else if (scale > 1) {
-                            scale = 1;
-                          }
-                        }
-                        return Opacity(
-                          opacity: scale,
-                          child: Transform(
-                            transform:  Matrix4.identity()..scale(scale,scale),
-                            alignment: Alignment.bottomCenter,
-                            child: Align(
-                                heightFactor: 0.7,
-                                alignment: Alignment.topCenter,
-                                child: itemsData[index]),
-                          ),
-                        );
-                      })),
-            ],
-          ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      AnimatedOpacity(
+                        duration: const Duration(milliseconds: 200),
+                        opacity: closeTopContainer?0:1,
+                        child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            width: size.width,
+                            alignment: Alignment.topCenter,
+                            height: closeTopContainer?0:categoryHeight,
+                            child: categoriesScroller),
+                      ),
+                      Expanded(
+                          child: ListView.builder(
+                              controller: controller,
+                              itemCount: data.docs.length,
+                              physics: BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                double scale = 1.0;
+                                if (topContainer > 0.5) {
+                                  scale = index + 0.5 - topContainer;
+                                  if (scale < 0) {
+                                    scale = 0;
+                                  } else if (scale > 1) {
+                                    scale = 1;
+                                  }
+                                }
+                                return Opacity(
+                                  opacity: scale,
+                                  child: Transform(
+                                    transform:  Matrix4.identity()..scale(scale,scale),
+                                    alignment: Alignment.bottomCenter,
+                                    child: Align(
+                                        heightFactor: 0.7,
+                                        alignment: Alignment.topCenter,
+                                        child: Container(
+                                            height: 150,
+                                            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20.0)), color: Colors.white, boxShadow: [
+                                              BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
+                                            ]),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: <Widget>[
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        data.docs[index]['Title'],
+                                                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                                      ),
+                                                      Text(
+                                                        Package_data[index]["brand"],
+                                                        style: const TextStyle(fontSize: 13, color: Colors.grey),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Text(
+                                                        "\Rs ${data.docs[index]["Price"]}",
+                                                        style: const TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Image.network(
+                                                    "${data.docs[index]["Image"]}",
+                                                    height: double.infinity,
+                                                    width: 100,
+                                                  )
+                                                ],
+                                              ),
+                                            ))
+
+                                    ),
+                                  ),
+                                );
+                              })),
+                    ],
+                  );
+                }
+            )
         ),
       ),
     );
