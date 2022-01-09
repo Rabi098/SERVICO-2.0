@@ -1,4 +1,5 @@
 import 'package:plumbify/screens/about_us.dart';
+import 'package:plumbify/screens/booking_details.dart';
 import 'package:plumbify/screens/electrician_homepage.dart';
 import 'package:plumbify/screens/handyman_screen.dart';
 import 'package:plumbify/screens/homepage.dart';
@@ -52,7 +53,8 @@ class HomePage extends StatelessWidget {
         'location':(context) => Map_location(),
         'electricians':(context) => ElectricianHome(),
         'plumber':(context) => PlumberHome(),
-        'HandymanScreen':(context) => HandymanScreen()
+        'HandymanScreen':(context) => HandymanScreen(),
+        'bookingdetails':(context) => BookingDetails(),
 
       },
     );

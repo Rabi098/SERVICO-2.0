@@ -80,7 +80,7 @@ class _HandymanScreenState extends State<HandymanScreen> {
                         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                         child: GestureDetector(
                           onTap: () {
-
+                            Navigator.of(context).pushNamed('bookingdetails',arguments: {'handyman':obj});
                           },
                           child: Container(
                             width: 200,
