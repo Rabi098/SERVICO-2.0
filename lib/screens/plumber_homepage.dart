@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class PlumberHome extends StatefulWidget {
+
   @override
   _PlumberHomeState createState() => _PlumberHomeState();
 }
@@ -28,6 +29,7 @@ class _PlumberHomeState extends State<PlumberHome> {
             itemBuilder: (context, index) {
               GeoPoint geoPoint = snapshot.data.docs[index]['workerlocation'];
               final Handyman obj = Handyman(
+                  id: snapshot.data.docs[index].id,
                   name: snapshot.data.docs[index]['Name'],
                   Type: snapshot.data.docs[index]['Type'],
                   desc: snapshot.data.docs[index]['desc'],
@@ -38,7 +40,8 @@ class _PlumberHomeState extends State<PlumberHome> {
               );
               return obj.Type=='Plumber'?ElectricainTile(
                 obj: obj,
-              ):Container();
+              ):Container(
+              );
             },
             staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
             mainAxisSpacing: 4.0,

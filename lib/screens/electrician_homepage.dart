@@ -26,7 +26,8 @@ class _ElectricianHomeState extends State<ElectricianHome> {
             itemBuilder: (context, index) {
               GeoPoint geoPoint = snapshot.data.docs[index]['workerlocation'];
               final Handyman obj = Handyman(
-                name: snapshot.data.docs[index]['Name'],
+                  id: snapshot.data.docs[index].id,
+                  name: snapshot.data.docs[index]['Name'],
                 Type: snapshot.data.docs[index]['Type'],
                 desc: snapshot.data.docs[index]['desc'],
                 location: LatLng(geoPoint.latitude,geoPoint.longitude),

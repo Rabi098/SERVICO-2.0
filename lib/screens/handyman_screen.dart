@@ -92,6 +92,7 @@ class _HandymanScreenState extends State<HandymanScreen> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white
+
                               ),
                             ),
                             decoration: BoxDecoration(

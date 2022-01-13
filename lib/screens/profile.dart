@@ -122,14 +122,15 @@ class _ProfileState extends State<Profile> {
                                 child: (_image!=null)?Image.file(
                                   _image,
                                   fit: BoxFit.fill,
-                                ):Image.network(
+                                ):(widget.auth.currentUser.photoURL)!=null?Image.network(
                                   widget.auth.currentUser.photoURL,
                                   fit: BoxFit.fill,
-                                ),
+                                ): Image.network('https://library.kissclipart.com/20180830/rtq/kissclipart-user-profile-clipart-user-profile-computer-icons-9fa0da1213c19b67.jpg')),
                               ),
                             ),
                           ),
-                        ),
+
+
                         Padding(
                           padding: EdgeInsets.only(top: 60.0),
                           child: IconButton(

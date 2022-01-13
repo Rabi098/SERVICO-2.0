@@ -21,7 +21,7 @@ class MapPageState extends State<MapPage> {
   Set<Polyline> _polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
-  String googleAPIKey = "AIzaSyBurtAyXCvrdkTR0xMWXxihZ79bJln7h1Y";
+  String googleAPIKey = "AIzaSyDOUhuU81nJP9L1fgZ0qXDjcd_wAfAeU0o";
   // for my custom icons
   BitmapDescriptor sourceIcon;
   BitmapDescriptor destinationIcon;
@@ -42,12 +42,6 @@ class MapPageState extends State<MapPage> {
         'assets/destination_map_marker.png');
   }
 
-  _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
-    MarkerId markerId = MarkerId(id);
-    Marker marker =
-    Marker(markerId: markerId, icon: descriptor, position: position);
-    _markers.add(marker);
-  }
   @override
   Widget build(BuildContext context) {
     CameraPosition initialLocation = CameraPosition(
@@ -101,6 +95,8 @@ class MapPageState extends State<MapPage> {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
+    }else{
+      print("-----------------------"+result.errorMessage);
     }
 
     setState(() {

@@ -1,9 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:plumbify/model/handyman.dart';
+import 'package:plumbify/screens/order_Complete.dart';
 import 'package:plumbify/screens/polylineView.dart';
+import 'package:plumbify/services/auth_services.dart';
+import 'package:plumbify/services/database.dart';
 import '../utils/CustomTextStyles.dart';
 
 class BookingDetails extends StatefulWidget {
+  final AuthBase auth;
+  const BookingDetails({Key key, @required this.auth}) : super(key: key);
+
   @override
   _BookingDetailsState createState() => _BookingDetailsState();
 }
@@ -24,7 +31,7 @@ class _BookingDetailsState extends State<BookingDetails> {
               Navigator.pop(context);
             }),
         title: Text(
-          "Title 1 ABCD",
+          "Confirm Booking",
           style: TextStyle(color: Colors.white, fontSize: 14),
         ),
       ),
@@ -50,7 +57,19 @@ class _BookingDetailsState extends State<BookingDetails> {
                   width: double.infinity,
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: updateButton(context, 'Confirm', (){
+                      DateTime today = DateTime.now();
+                      var x = DatabaseMethods().addOrder('',widget.auth.currentUser.uid, GeoPoint(0,0),GeoPoint(obj.location.latitude, obj.location.longitude), obj.id, 'Pending', today,today.add(const Duration(minutes: 60)));
+                      print('Afterr*************************************');
+                      if(x == true){
+                        //Navigator.of(context).pushNamed('isOrderPlaced',arguments: {'isPlaced':true});
+                        Navigator.of(context).popAndPushNamed('isOrderPlaced',arguments: {'isPlaced':true});
+                      }else
+                        {
 
+                          Navigator.of(context).popAndPushNamed('isOrderPlaced',arguments: {'isPlaced':false});
+                          //Navigator.of(context).pushNamed('isOrderPlaced',arguments: {'isPlaced':false});
+
+                        }
                   })
               ),
               flex: 10,
