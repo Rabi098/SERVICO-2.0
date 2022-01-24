@@ -27,7 +27,7 @@ class _PlumberHomeState extends State<PlumberHome> {
             shrinkWrap: true,
 
             itemBuilder: (context, index) {
-              GeoPoint geoPoint = snapshot.data.docs[index]['workerlocation'];
+              GeoPoint geoPoint = snapshot.data.docs[index]['workerLocation'];
               final Handyman obj = Handyman(
                   id: snapshot.data.docs[index].id,
                   name: snapshot.data.docs[index]['Name'],
@@ -48,8 +48,10 @@ class _PlumberHomeState extends State<PlumberHome> {
             crossAxisSpacing: 4.0,
             )
             : Container(
-          child: Text("NO DATA Recieved\n"+snapshot.toString()),
+
+          child: CircularProgressIndicator(),
         );
+
       },
     );
   }

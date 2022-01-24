@@ -5,7 +5,7 @@ class Handyman{
   String id;
   String name;
   String Type;
-  int phoneNum;
+  String phoneNum;
   String desc;
   String profilePic;
   LatLng location;

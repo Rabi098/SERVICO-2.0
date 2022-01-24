@@ -24,9 +24,9 @@ class _ElectricianHomeState extends State<ElectricianHome> {
             itemCount: snapshot.data.docs.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              GeoPoint geoPoint = snapshot.data.docs[index]['workerlocation'];
+              GeoPoint geoPoint = snapshot.data.docs[index]['workerLocation'];
               final Handyman obj = Handyman(
-                  id: snapshot.data.docs[index].id,
+                  id: snapshot.data.docs[index]['uid'],
                   name: snapshot.data.docs[index]['Name'],
                 Type: snapshot.data.docs[index]['Type'],
                 desc: snapshot.data.docs[index]['desc'],
@@ -37,7 +37,9 @@ class _ElectricianHomeState extends State<ElectricianHome> {
               );
               return obj.Type=='Electrician'?ElectricainTile(
                 obj: obj,
-              ):Container();
+              ):Container(
+                child: null,
+              );
             },
             staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
             mainAxisSpacing: 4.0,
