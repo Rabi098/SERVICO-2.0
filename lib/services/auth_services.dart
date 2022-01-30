@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:plumbify/Controller/UserController.dart';
+import 'package:plumbify/model/user.dart';
 abstract class AuthBase {
 
   User get currentUser;
@@ -24,6 +28,7 @@ abstract class AuthBase {
 
 class Auth implements AuthBase {
   final _firebaseAuth = FirebaseAuth.instance;
+  UserController userController = Get.find(tag:'user_controller');
 
   @override
   Stream<User> authStateChanges() => _firebaseAuth.authStateChanges();
@@ -51,6 +56,20 @@ class Auth implements AuthBase {
     User firebaseUser = userCredential.user;
     firebaseUser.updateProfile( displayName: name);
     firebaseUser.reload();
+    USer user = USer(uid: firebaseUser.uid,
+
+        profile_pic: firebaseUser.photoURL,
+        phone: '',
+        nearby_address: '',
+        geoPoint: GeoPoint(0,0),
+        full_address: '',
+        email: firebaseUser.email,
+        name: name,
+
+    );
+
+    userController.postUser(user);
+
     return firebaseUser;
   }
 
