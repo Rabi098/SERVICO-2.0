@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+import 'package:plumbify/Controller/UserController.dart';
 import 'package:plumbify/screens/about_us.dart';
 import 'package:plumbify/screens/booking_details.dart';
 import 'package:plumbify/screens/electrician_homepage.dart';
@@ -19,6 +21,8 @@ class HomePage extends StatelessWidget {
 
   HomePage({@required this.auth});
   final AuthBase auth;
+  UserController userController = Get.find(tag:'user_controller');
+
   // This widget is the root of your application.
   Map<int, Color> color = {
     50: const Color.fromRGBO(250, 80, 88, .1),
@@ -35,6 +39,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    userController.user.value==null?userController.fetchUser(auth.currentUser.uid):userController.user.value;
+
     final MaterialColor colorCustom = MaterialColor(0xFFFF0000 , color);
     return MaterialApp(
       title: 'SERVICO',

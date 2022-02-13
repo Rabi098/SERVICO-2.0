@@ -23,7 +23,9 @@ class _ElectricianHomeState extends State<ElectricianHome> {
             ? StaggeredGridView.countBuilder(crossAxisCount: 2,
             itemCount: snapshot.data.docs.length,
             shrinkWrap: true,
+
             itemBuilder: (context, index) {
+
               GeoPoint geoPoint = snapshot.data.docs[index]['workerLocation'];
               final Handyman obj = Handyman(
                   id: snapshot.data.docs[index]['uid'],
@@ -35,18 +37,20 @@ class _ElectricianHomeState extends State<ElectricianHome> {
                 profilePic: snapshot.data.docs[index]['profilePic'],
                   price: snapshot.data.docs[index]['price']
               );
+
               return obj.Type=='Electrician'?ElectricainTile(
                 obj: obj,
-              ):Container(
-                child: null,
-              );
+              ):Column();
             },
             staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-            mainAxisSpacing: 4.0,
+            mainAxisSpacing:  .0,
             crossAxisSpacing: 4.0,
             )
             : Container(
-          child: Text("NO DATA Recieved\n"+snapshot.toString()),
+          child: Container(
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(),
+          )
         );
       },
     );
@@ -60,7 +64,7 @@ class _ElectricianHomeState extends State<ElectricianHome> {
 
   getUserInfogetData() async {
     //Constants.myName = await HelperFunctions.getUserNameSharedPreference();
-    DatabaseMethods().getWorkers().then((snapshots) {
+    DatabaseMethods().getWorkers('Electrician').then((snapshots) {
       setState(() {
         electricianData = snapshots;
         print(

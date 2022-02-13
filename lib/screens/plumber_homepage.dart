@@ -38,9 +38,10 @@ class _PlumberHomeState extends State<PlumberHome> {
                   profilePic: snapshot.data.docs[index]['profilePic'],
                   price: snapshot.data.docs[index]['price']
               );
+
               return obj.Type=='Plumber'?ElectricainTile(
                 obj: obj,
-              ):Container(
+              ):Column(
               );
             },
             staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
@@ -64,7 +65,7 @@ class _PlumberHomeState extends State<PlumberHome> {
 
   getUserInfogetData() async {
     //Constants.myName = await HelperFunctions.getUserNameSharedPreference();
-    DatabaseMethods().getWorkers().then((snapshots) {
+    DatabaseMethods().getWorkers('Plumber').then((snapshots) {
       setState(() {
         PlumberData = snapshots;
         print(
