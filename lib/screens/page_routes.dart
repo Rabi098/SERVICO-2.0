@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
       routes: {
         '/':(context) => Home(auth: auth,),
         'aboutus':(context) => AboutUS(),
-        'rewards':(context) => Rewards(),
+        'rewards':(context) => Rewards(auth: auth),
         'orderhistory':(context) => OrderHistory(),
         'profile':(context) => Profile(auth: auth),
         'notifications':(context) => Notifications(),

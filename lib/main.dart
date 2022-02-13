@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:plumbify/screens/firstview.dart';
 import 'package:plumbify/Login%20Work/landing_page.dart';
+import 'package:plumbify/screens/rewards.dart';
 import 'package:plumbify/services/auth_services.dart';
 
 void main() async {

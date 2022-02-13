@@ -17,6 +17,7 @@ class BookingDetails extends StatefulWidget {
 
 class _BookingDetailsState extends State<BookingDetails> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+  final usepoints = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -427,10 +428,29 @@ class _BookingDetailsState extends State<BookingDetails> {
                   "Tax", getFormattedCurrency(96), Colors.grey.shade700),
               createPriceItem("Order Total", getFormattedCurrency(2013),
                   Colors.grey.shade700),
-              createPriceItem(
-                  "Delievery Charges", "FREE", Colors.teal.shade300),
+              // createPriceItem(
+              //     "Delievery Charges", "FREE", Colors.teal.shade300),
               SizedBox(
-                height: 8,
+                height: 5.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Use Reward Points",style: CustomTextStyle.textFormFieldMedium
+                      .copyWith(color: Colors.grey.shade700, fontSize: 12),),
+                  Container(
+                      width: 70.0,
+                      height: 20,
+                      child: TextField(
+                        controller: usepoints,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                        )
+                      )
+                  )
+                ],
               ),
               Container(
                 width: double.infinity,
