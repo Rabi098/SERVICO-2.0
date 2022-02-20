@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,10 @@ const LatLng SOURCE_LOCATION = LatLng(24.8452715, 67.0535552);
 const LatLng DEST_LOCATION = LatLng(24.837477,67.0394931);
 
 class MapPage extends StatefulWidget {
+  final LatLng location;
+  final GeoPoint geoPoint;
+  MapPage({Key key,  this.geoPoint,this.location}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => MapPageState();
 }
@@ -86,8 +91,8 @@ class MapPageState extends State<MapPage> {
 
     PolylineResult result = (await polylinePoints?.getRouteBetweenCoordinates(
         googleAPIKey,
-        PointLatLng(SOURCE_LOCATION.latitude, SOURCE_LOCATION.longitude),
-        PointLatLng(DEST_LOCATION.latitude, DEST_LOCATION.longitude),
+        PointLatLng(widget.geoPoint.latitude, widget.geoPoint.longitude),
+        PointLatLng(widget.location.latitude, widget.location.longitude),
         travelMode: TravelMode.driving
     ));
     if (result.points.isNotEmpty) {
@@ -100,16 +105,10 @@ class MapPageState extends State<MapPage> {
     }
 
     setState(() {
-      // create a Polyline instance
-      // with an id, an RGB color and the list of LatLng pairs
       Polyline polyline = Polyline(
           polylineId: PolylineId("poly"),
           color: Colors.red,
           points: polylineCoordinates);
-
-      // add the constructed polyline as a set of points
-      // to the polyline set, which will eventually
-      // end up showing up on the map
       _polylines.add(polyline);
     });
   }

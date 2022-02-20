@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:plumbify/Controller/UserController.dart';
 import 'package:plumbify/model/handyman.dart';
 import 'package:plumbify/screens/order_Complete.dart';
 import 'package:plumbify/screens/polylineView.dart';
@@ -9,7 +12,8 @@ import '../utils/CustomTextStyles.dart';
 
 class BookingDetails extends StatefulWidget {
   final AuthBase auth;
-  const BookingDetails({Key key, @required this.auth}) : super(key: key);
+   BookingDetails({Key key, @required this.auth}) : super(key: key);
+  UserController userController;
 
   @override
   _BookingDetailsState createState() => _BookingDetailsState();
@@ -17,10 +21,11 @@ class BookingDetails extends StatefulWidget {
 
 class _BookingDetailsState extends State<BookingDetails> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
-  final usepoints = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+     widget.userController = Get.find(tag:'user_controller');
+
     final args= ModalRoute.of(context).settings.arguments as Map<String, Handyman>;
     Handyman obj = args['handyman'];
     return Scaffold(
@@ -43,11 +48,11 @@ class _BookingDetailsState extends State<BookingDetails> {
               child: Container(
                 child: ListView(
                   children: <Widget>[
-                    mapsWidget(context),
+                    mapsWidget(context,widget.userController.user.value.geoPoint,obj.location),
                     selectedAddressSection(),
                     //imagesTileWidget(context),
                     taskDescription(),
-                    priceSection()
+                    priceSection(obj.price)
                   ],
                 ),
               ),
@@ -95,13 +100,13 @@ class _BookingDetailsState extends State<BookingDetails> {
       ),
     );
   }
-  mapsWidget(BuildContext context){
+  mapsWidget(BuildContext context, GeoPoint geoPoint, LatLng location){
     return Container(
       margin: EdgeInsets.all(10),
       height: 300,
       width: double.infinity,
       alignment: Alignment.center,
-      child: MapPage(),
+      child: MapPage(geoPoint: geoPoint,location: location),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -293,7 +298,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    "Somesh Kumar (Default)",
+                    widget.userController.user.value.name,
                     style: CustomTextStyle.textFormFieldSemiBold
                         .copyWith(fontSize: 14),
                   ),
@@ -313,14 +318,14 @@ class _BookingDetailsState extends State<BookingDetails> {
                 ],
               ),
               Text(
-                "Date: 10/3/2021, Time: 15:00 to 20:00",
+                "Date: NULL",
                 style: CustomTextStyle.textFormFieldSemiBold
                     .copyWith(fontSize: 14),
               ),
               createAddressText(
-                  "DHA Suffa University", 16),
-              createAddressText("DHA Phase 7", 6),
-              createAddressText("Karachi, Sindh", 6),
+                  widget.userController.user.value.full_address, 16),
+              createAddressText(widget.userController.user.value.nearby_address, 6),
+
               SizedBox(
                 height: 6,
               ),
@@ -331,7 +336,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                       style: CustomTextStyle.textFormFieldMedium
                           .copyWith(fontSize: 12, color: Colors.grey.shade800)),
                   TextSpan(
-                      text: "02222673745",
+                      text: widget.userController.user.value.phone,
                       style: CustomTextStyle.textFormFieldBold
                           .copyWith(color: Colors.black, fontSize: 12)),
                 ]),
@@ -380,7 +385,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   }
 
 
-  priceSection() {
+  priceSection(int price) {
     return Container(
       margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -411,67 +416,18 @@ class _BookingDetailsState extends State<BookingDetails> {
               SizedBox(
                 height: 4,
               ),
-              Container(
-                width: double.infinity,
-                height: 0.5,
-                margin: EdgeInsets.symmetric(vertical: 4),
-                color: Colors.grey.shade400,
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              createPriceItem("Total MRP", getFormattedCurrency(5197),
-                  Colors.grey.shade700),
-              createPriceItem("Bag discount", getFormattedCurrency(3280),
-                  Colors.teal.shade300),
-              createPriceItem(
-                  "Tax", getFormattedCurrency(96), Colors.grey.shade700),
-              createPriceItem("Order Total", getFormattedCurrency(2013),
-                  Colors.grey.shade700),
-              // createPriceItem(
-              //     "Delievery Charges", "FREE", Colors.teal.shade300),
-              SizedBox(
-                height: 5.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Use Reward Points",style: CustomTextStyle.textFormFieldMedium
-                      .copyWith(color: Colors.grey.shade700, fontSize: 12),),
-                  Container(
-                      width: 70.0,
-                      height: 20,
-                      child: TextField(
-                        controller: usepoints,
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                        )
-                      )
-                  )
-                ],
-              ),
-              Container(
-                width: double.infinity,
-                height: 0.5,
-                margin: EdgeInsets.symmetric(vertical: 4),
-                color: Colors.grey.shade400,
-              ),
-              SizedBox(
-                height: 8,
-              ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Total",
+                    "Charges (Hourly)",
                     style: CustomTextStyle.textFormFieldSemiBold
                         .copyWith(color: Colors.black, fontSize: 12),
                   ),
                   Text(
-                    getFormattedCurrency(2013),
+                    getFormattedCurrency(price),
                     style: CustomTextStyle.textFormFieldMedium
                         .copyWith(color: Colors.black, fontSize: 12),
                   )
@@ -484,7 +440,7 @@ class _BookingDetailsState extends State<BookingDetails> {
     );
   }
 
-  String getFormattedCurrency(double amount) {
+  String getFormattedCurrency(int amount) {
 
     return 'Rs. ${amount.toString()}';
   }

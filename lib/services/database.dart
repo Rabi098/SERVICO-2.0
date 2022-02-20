@@ -20,7 +20,7 @@ class DatabaseMethods {
     print(uid);
     print('-----------------------------------------------------------------------------');
 
-    await Firestore.collection("Handyman").where("uid",isEqualTo: uid).limit(1).get().then(( QuerySnapshot value) {
+    await Firestore.collection("Users").where("uid",isEqualTo: uid).limit(1).get().then(( QuerySnapshot value) {
 
       Map<String, dynamic> documentData = value.docs.single.data();
       uSer = USer(
@@ -53,7 +53,7 @@ class DatabaseMethods {
   }
   addUser(USer user){
     bool is_Added = true;
-    var x = Firestore.collection('Handyman').doc(user.uid)
+    var x = Firestore.collection('Users').doc(user.uid)
         .set({
       'uid':user.uid,
       'Name': user.name,
