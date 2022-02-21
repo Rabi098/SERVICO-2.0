@@ -64,7 +64,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: updateButton(context, 'Confirm', (){
                       DateTime today = DateTime.now();
-                      var x = DatabaseMethods().addOrder('',widget.auth.currentUser.uid, GeoPoint(0,0),GeoPoint(obj.location.latitude, obj.location.longitude), obj.id, 'Pending', today,today.add(const Duration(minutes: 60)));
+                      var x = DatabaseMethods().addOrder('',widget.auth.currentUser.uid, GeoPoint(0,0),GeoPoint(obj.location.latitude, obj.location.longitude), obj.id, 'Pending', today,today);
                       print('Afterr*************************************');
                       if(x == true){
                         //Navigator.of(context).pushNamed('isOrderPlaced',arguments: {'isPlaced':true});
@@ -106,7 +106,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       height: 300,
       width: double.infinity,
       alignment: Alignment.center,
-      child: MapPage(geoPoint: geoPoint,location: location),
+      child: MapPage(SOURCE: LatLng(geoPoint.latitude,geoPoint.longitude),DESTINATION: location,),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
