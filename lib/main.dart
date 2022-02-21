@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:plumbify/Controller/UserController.dart';
 import 'package:plumbify/screens/firstview.dart';
 import 'package:plumbify/Login%20Work/landing_page.dart';
+import 'package:plumbify/screens/phone_verification.dart';
 import 'package:plumbify/screens/rewards.dart';
 import 'package:plumbify/services/auth_services.dart';
 

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:plumbify/Controller/UserController.dart';
+import 'package:plumbify/Widgets/myNavigation.dart';
 import 'package:plumbify/screens/about_us.dart';
 import 'package:plumbify/screens/booking_details.dart';
 import 'package:plumbify/screens/electrician_homepage.dart';
@@ -48,10 +49,14 @@ class HomePage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: colorCustom,
         accentColor: Colors.white,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: colorCustom,
+        ),
       ),
       initialRoute: '/',
       routes: {
-        '/':(context) => Home(auth: auth,),
+        '/':(context) => MyNavigationBar(auth: auth),
+        'home':(context) => Home(auth: auth,),
         'aboutus':(context) => AboutUS(),
         'rewards':(context) => Rewards(auth: auth),
         'orderhistory':(context) => OrderHistory(),

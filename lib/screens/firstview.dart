@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:plumbify/screens/phone_verification.dart';
+import 'package:plumbify/screens/registerscreen.dart';
 import '../services/auth_services.dart';
 import 'package:plumbify/screens/login_page_flow.dart';
 
@@ -9,21 +11,6 @@ class Firstpage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    void _signInWithEmail(){
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-                fullscreenDialog: true,
-                builder: (context) => EmailSignInPage(auth: auth))
-          );
-    }
-    void _signUpWithEmail(){
-      Navigator.of(context).push(
-          MaterialPageRoute<void>(
-              fullscreenDialog: true,
-              builder: (context) => EmailsignUpPage(auth: auth))
-      );
-    }
 
     final _gaph = MediaQuery.of(context).size.height;
     final _gapw = MediaQuery.of(context).size.width;
@@ -57,20 +44,29 @@ class Firstpage extends StatelessWidget {
                 height: _gaph * 0.03,
               ),
               // ignore: deprecated_member_use
-              RaisedButton(
-                onPressed: _signUpWithEmail,
-                color: Colors.red,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10.0, bottom: 10.0, left: 30.0, right: 30.0),
-                  child: Text(
-                    'Get Started',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w300),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          fullscreenDialog: true,
+                          builder: (context) => RegisterScreen(auth: auth))
+                  );
+                },
+                child: Container(
+                  width: 200,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.red,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Register',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w300),
+                    ),
                   ),
                 ),
               ),
@@ -78,22 +74,29 @@ class Firstpage extends StatelessWidget {
                 height: _gaph * 0.03,
               ),
               // ignore: deprecated_member_use
-              RaisedButton(
-                onPressed: () {
-                  _signInWithEmail();
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          fullscreenDialog: true,
+                          builder: (context) => NumberVerify(auth: auth))
+                  );
                 },
-                color: Colors.red,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10.0, bottom: 10.0, left: 50.0, right: 50.0),
-                  child: Text(
-                    'Sign In',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w300),
+                child: Container(
+                  width: 200,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.red,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Sign In',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w300),
+                    ),
                   ),
                 ),
               ),

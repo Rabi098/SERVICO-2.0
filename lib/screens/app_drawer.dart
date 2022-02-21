@@ -1,15 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:plumbify/services/auth_services.dart';
 
-
-class MainDrawer extends StatelessWidget {
-
+class MainDrawer extends StatefulWidget {
   MainDrawer({@required this.auth});
   final AuthBase auth;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  @override
+  _MainDrawerState createState() => _MainDrawerState();
+}
 
+class _MainDrawerState extends State<MainDrawer> {
   Future<void> _signout () async {
     try{
-      await auth.signOut();
+      await widget.auth.signOut();
 
     } catch(e){
       print(e.toString());
@@ -44,42 +48,41 @@ class MainDrawer extends StatelessWidget {
                   color: Theme.of(context).primaryColor),
             ),
           ),
-
           UserAccountsDrawerHeader(
-            accountName: Text("${auth.currentUser.displayName}"),
-            accountEmail: Text("${auth.currentUser.email}"),
+            accountName: Text("${widget._auth.currentUser.displayName}"),
+            accountEmail: Text("${widget._auth.currentUser.email}"),
             currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage('https://library.kissclipart.com/20180830/rtq/kissclipart-user-profile-clipart-user-profile-computer-icons-9fa0da1213c19b67.jpg')),
           ),
           SizedBox(
             height: 20,
           ),
-        ListTile(
-          leading: Icon(
-            Icons.person,
-            size: 26,
-          ),
-          title: Text(
-            "Profile",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          onTap: () {
+          ListTile(
+              leading: Icon(
+                Icons.person,
+                size: 26,
+              ),
+              title: Text(
+                "Profile",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
 
-           Navigator.of(context).pop();
-            Navigator.of(context).pushNamed('profile');
-          }),
-        ListTile(
-          leading: Icon(
-            Icons.star,
-            size: 26,
-          ),
-          title: Text(
-            "Your Rewards",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          onTap: () {
-            Navigator.of(context).pushNamed('rewards');
-          }),
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed('profile');
+              }),
+          ListTile(
+              leading: Icon(
+                Icons.star,
+                size: 26,
+              ),
+              title: Text(
+                "Your Rewards",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed('rewards');
+              }),
           ListTile(
               leading: Icon(
                 Icons.history,
@@ -95,29 +98,29 @@ class MainDrawer extends StatelessWidget {
 
 
           ListTile(
-          leading: Icon(
-            Icons.notifications,
-            size: 26,
-          ),
-          title: Text(
-            "Notifications",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          onTap: () {
-            Navigator.of(context).pushNamed('notifications');
-          }),
-        ListTile(
-          leading: Icon(
-            Icons.info_outline,
-            size: 26,
-          ),
-          title: Text(
-            "About us",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          onTap: () {
-            Navigator.of(context).pushNamed('aboutus');
-          }),
+              leading: Icon(
+                Icons.notifications,
+                size: 26,
+              ),
+              title: Text(
+                "Notifications",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed('notifications');
+              }),
+          ListTile(
+              leading: Icon(
+                Icons.info_outline,
+                size: 26,
+              ),
+              title: Text(
+                "About us",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed('aboutus');
+              }),
 
           ListTile(
               leading: null,
@@ -129,17 +132,17 @@ class MainDrawer extends StatelessWidget {
               }),
 
           ListTile(
-            leading: Icon(
-              Icons.logout,
-              size: 26,
-              color: Colors.grey,
-            ),
-            title: Text(
-              "Logout",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.black),
+              leading: Icon(
+                Icons.logout,
+                size: 26,
+                color: Colors.grey,
+              ),
+              title: Text(
+                "Logout",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.black),
 
-            ),
-            onTap: _signout
+              ),
+              onTap: _signout
           )
         ],
       ),
@@ -147,3 +150,5 @@ class MainDrawer extends StatelessWidget {
 
   }
 }
+
+

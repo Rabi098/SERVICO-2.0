@@ -83,13 +83,13 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("SERVICO"),
-        actions: <Widget>[
-          IconButton(onPressed:(){ Navigator.of(context).pushNamed('location');}, icon: Icon(Icons.location_pin,color: Colors.white,))
-        ],
-      ),
-      drawer: MainDrawer(auth: widget.auth,),
+      // appBar: AppBar(
+      //   title: Text("SERVICO"),
+      //   actions: <Widget>[
+      //     IconButton(onPressed:(){ Navigator.of(context).pushNamed('location');}, icon: Icon(Icons.location_pin,color: Colors.white,))
+      //   ],
+      // ),
+      //drawer: MainDrawer(auth: widget.auth,),
       body:SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -154,7 +154,7 @@ class _HomeState extends State<Home> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      height: 500,
+                      height: MediaQuery.of(context).size.height * 0.6,
                       padding: EdgeInsets.all(10),
                       child: ListView(
                           children: <Widget>[
@@ -170,7 +170,7 @@ class _HomeState extends State<Home> {
                             BuildListTile('assets/deals.jpg','Deals',(){
                               Navigator.push(context, MaterialPageRoute(builder: (context) => Packages()));
                             }
-                              ),
+                            ),
                             SizedBox(height: 70),
                           ]
 
@@ -200,6 +200,7 @@ class _HomeState extends State<Home> {
       ),
 
     );
+
   }
 }
 

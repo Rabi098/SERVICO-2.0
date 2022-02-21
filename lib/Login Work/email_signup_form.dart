@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plumbify/Login%20Work/landing_page.dart';
 import '../services/auth_services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
@@ -25,7 +26,7 @@ class _EmailsignUpformState extends State<EmailsignUpform> {
   void _submit() async {
     try{
       await widget.auth.createUserWithEmailAndPassword(_email, _password,_name);
-      Navigator.of(context).pop();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPage(auth: widget.auth,)));
 
     } catch (e) {
       print(e.toString());

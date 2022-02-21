@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:plumbify/Controller/UserController.dart';
 import 'package:plumbify/model/user.dart';
+import 'package:plumbify/screens/phone_verification.dart';
 abstract class AuthBase {
 
   User get currentUser;
@@ -37,6 +40,7 @@ class Auth implements AuthBase {
   @override
   User get currentUser => _firebaseAuth.currentUser;
 
+
   @override
   Future<User> signInWithEmailAndPassword(String email, String password) async {
     final userCredential = await _firebaseAuth.signInWithCredential(
@@ -59,7 +63,7 @@ class Auth implements AuthBase {
     USer user = USer(uid: firebaseUser.uid,
 
         profile_pic: firebaseUser.photoURL,
-        phone: '',
+        phone: firebaseUser.phoneNumber,
         nearby_address: '',
         geoPoint: GeoPoint(0,0),
         full_address: '',
@@ -137,4 +141,8 @@ class Auth implements AuthBase {
     await facebookLogin.logOut();
     await _firebaseAuth.signOut();
   }
+
+
 }
+
+

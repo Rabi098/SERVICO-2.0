@@ -312,7 +312,7 @@ class _ProfileState extends State<Profile> {
         TextField(
           controller: phoneController,
           decoration: InputDecoration(
-              hintText: '+923123456789'
+              hintText: widget.auth.currentUser.phoneNumber
           ),
         )
       ],
