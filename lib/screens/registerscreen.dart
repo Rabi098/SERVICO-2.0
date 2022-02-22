@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:plumbify/Controller/UserController.dart';
@@ -40,6 +42,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var isOTPScreen = false;
   var verificationCode = '';
 
+  Future<void> _signInWithGoogle() async {
+    try{
+      await widget.auth.signInWithGoogle();
+      Navigator.of(context).pop();
+
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+  Future<void> _signInWithFacebook() async {
+    try{
+      await widget.auth.signInWithFacebook();
+      Navigator.of(context).pop();
+
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   //Form controllers
   @override
   void initState() {
@@ -62,117 +83,124 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget registerScreen() {
     final node = FocusScope.of(context);
+    final _gaph = MediaQuery.of(context).size.height;
+    final _gapw = MediaQuery.of(context).size.width;
     return Scaffold(
         key: _scaffoldKey,
         appBar: new AppBar(
           backgroundColor: Colors.red,
           title: Text('Register new user'),
         ),
-        body: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 10.0),
-                    child: TextFormField(
-                      enabled: !isLoading,
-                      controller: nameController,
-                      textInputAction: TextInputAction.next,
-                      onEditingComplete: () => node.nextFocus(),
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                          floatingLabelBehavior:
-                          FloatingLabelBehavior.never,
-                          labelText: 'Name'),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter a name';
+        body: SingleChildScrollView(
+          child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 50,),
+                    Image(
+                      image: AssetImage('assets/logo2.png'),
+                      height: _gaph * 0.20,
+                      width: _gapw * 0.40,
+                    ),
+                    Text(
+                      'SERVICO',
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 10,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 10.0),
+                      child: TextFormField(
+                        enabled: !isLoading,
+                        controller: nameController,
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () => node.nextFocus(),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                            floatingLabelBehavior:
+                            FloatingLabelBehavior.never,
+                            labelText: 'Name'),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a name';
+                          }
+                        },
+                      ),
+                    ),
+                    Container(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10.0),
+                          child: TextFormField(
+                            enabled: !isLoading,
+                            keyboardType: TextInputType.phone,
+                            controller: cellnumberController,
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) => node.unfocus(),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                                hintText: 'Phone Number',
+                                floatingLabelBehavior:
+                                FloatingLabelBehavior.never,
+                                labelText: 'Phone Number'),
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter a phone number';
+                              }
+                            },
+                          ),
+                        )),
+                    SizedBox(height: 20,),
+                    GestureDetector(
+                      onTap: () {
+                        if (!isLoading) {
+                          if (_formKey.currentState.validate()) {
+                            // If the form is valid, we want to show a loading Snackbar
+                            setState(() {
+                              signUp();
+                              isRegister = false;
+                              isOTPScreen = true;
+                            });
+                          }
                         }
                       },
-                    ),
-                  ),
-                  Container(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 10.0),
-                        child: TextFormField(
-                          enabled: !isLoading,
-                          controller: emailController,
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (_) => node.unfocus(),
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                              hintText: 'Email address',
-                              floatingLabelBehavior:
-                              FloatingLabelBehavior.never,
-                              labelText: 'Email address'),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter email address';
-                            }
-                          },
+                      child: new Container(
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(20)
                         ),
-                      )),
-                  Container(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 10.0),
-                        child: TextFormField(
-                          enabled: !isLoading,
-                          keyboardType: TextInputType.phone,
-                          controller: cellnumberController,
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (_) => node.unfocus(),
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                              hintText: 'Phone Number',
-                              floatingLabelBehavior:
-                              FloatingLabelBehavior.never,
-                              labelText: 'Phone Number'),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter a phone number';
-                            }
-                          },
-                        ),
-                      )),
-                  SizedBox(height: 20,),
-                  GestureDetector(
-                    onTap: () {
-                      if (!isLoading) {
-                        if (_formKey.currentState.validate()) {
-                          // If the form is valid, we want to show a loading Snackbar
-                          setState(() {
-                            signUp();
-                            isRegister = false;
-                            isOTPScreen = true;
-                          });
-                        }
-                      }
-                    },
-                    child: new Container(
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(20)
-                      ),
-                      width: 100,
-                      height: 50,
-                      child: Center(
-                        child: Text(
-                          "Next",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white),
+                        width: 100,
+                        height: 50,
+                        child: Center(
+                          child: Text(
+                            "Next",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )));
+                    SizedBox(height: 10,),
+                    SignInButton(
+                      Buttons.Google,
+                      text: "Sign up with Google",
+                      onPressed: _signInWithGoogle,
+                    ),
+                    SignInButton(
+                      Buttons.Facebook,
+                      text: "Sign up with Facebook",
+                      onPressed: _signInWithFacebook,
+                    ),
+                  ],
+                ),
+              )),
+        ));
   }
 
   Widget returnOTPScreen() {
@@ -248,6 +276,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     .then((usercred) async =>
                                 {
                                   //sign in was success
+                                usercred.user.updateProfile(displayName: nameController.text),
                                   if (usercred != null)
                                     {
                                       userController.postUser(USer(uid: usercred.user.uid,
@@ -257,7 +286,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         nearby_address: '',
                                         geoPoint: GeoPoint(0,0),
                                         full_address: '',
-                                        email: emailController.text,
+                                        email: '',
                                         name: nameController.text,
 
                                       ),),
@@ -294,6 +323,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         isLoading = false;
                                         isResend = false;
                                       }),
+                                      Navigator.pop(context),
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -335,6 +365,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
+
                               ],
                             ),
                           ),
@@ -414,13 +445,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               //store registration details in firestore database
             userController.postUser(USer(uid: usercred.user.uid,
 
-          profile_pic: usercred.user.photoURL,
-          phone: cellnumberController.text,
-          nearby_address: '',
-          geoPoint: GeoPoint(0,0),
-          full_address: '',
-          email: emailController.text,
-          name: nameController.text,
+              profile_pic: usercred.user.photoURL,
+              phone: cellnumberController.text,
+              nearby_address: '',
+              geoPoint: GeoPoint(0,0),
+              full_address: '',
+              email: '',
+              name: nameController.text,
 
         ),),
 

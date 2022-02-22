@@ -13,6 +13,7 @@ import 'package:plumbify/screens/order_history.dart';
 import 'package:plumbify/screens/packages.dart';
 import 'package:plumbify/screens/plumber_homepage.dart';
 import 'package:plumbify/screens/profile.dart';
+import 'package:plumbify/screens/registerscreen.dart';
 import 'package:plumbify/screens/rewards.dart';
 import 'package:flutter/material.dart';
 import 'package:plumbify/services/auth_services.dart';
@@ -67,7 +68,7 @@ class HomePage extends StatelessWidget {
         'plumber':(context) => PlumberHome(),
         'HandymanScreen':(context) => HandymanScreen(),
         'bookingdetails':(context) => BookingDetails(auth: auth),
-        'isOrderPlaced':(context) => isOrderPlaced()
+        'isOrderPlaced':(context) => isOrderPlaced(),
 
       },
     );

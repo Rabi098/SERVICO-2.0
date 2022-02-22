@@ -41,7 +41,7 @@ class _MainDrawerState extends State<MainDrawer> {
             padding: EdgeInsets.all(20),
             alignment: Alignment.centerLeft,
             child: Text(
-              'Hello! User',
+              'Hello! ${widget._auth.currentUser.displayName}',
               style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 28,
@@ -50,7 +50,7 @@ class _MainDrawerState extends State<MainDrawer> {
           ),
           UserAccountsDrawerHeader(
             accountName: Text("${widget._auth.currentUser.displayName}"),
-            accountEmail: Text("${widget._auth.currentUser.email}"),
+            accountEmail: Text("${widget._auth.currentUser.email}" != "null"? widget.auth.currentUser.email : "Welcome!"),
             currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage('https://library.kissclipart.com/20180830/rtq/kissclipart-user-profile-clipart-user-profile-computer-icons-9fa0da1213c19b67.jpg')),
           ),

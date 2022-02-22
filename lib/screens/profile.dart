@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../Controller/UserController.dart';
 import '../services/auth_services.dart';
@@ -61,7 +63,6 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-
     displayNameController.text = userController.user.value.name;
     bioController.text = userController.user.value.email;
     url = userController.user.value.profile_pic;

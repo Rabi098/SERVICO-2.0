@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:plumbify/Login%20Work/landing_page.dart';
 import 'package:plumbify/screens/homepage.dart';
+import 'package:plumbify/screens/registerscreen.dart';
 import 'package:plumbify/services/auth_services.dart';
 
 import 'login_page_flow.dart';
@@ -50,6 +52,10 @@ class _NumberVerifyState extends State<NumberVerify> {
       if(authCredential?.user != null){
         Navigator.push(context, MaterialPageRoute(builder: (context)=> LandingPage(auth: widget.auth)));
       }
+      else
+        {
+         //showAlertDialog(context);
+        }
 
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -59,6 +65,35 @@ class _NumberVerifyState extends State<NumberVerify> {
       _scaffoldKey.currentState
           .showSnackBar(SnackBar(content: Text(e.message)));
     }
+  }
+
+  showAlertDialog(BuildContext context) {
+
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("Register"),
+      onPressed: () {
+        Navigator.pop(context);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterScreen(auth: widget.auth,)));
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Notice!"),
+      content: Text("Register your account first."),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   getMobileFormWidget(context) {
@@ -76,36 +111,48 @@ class _NumberVerifyState extends State<NumberVerify> {
           height: 16,
         ),
         FlatButton(
-          onPressed: () async {
+          onPressed: ()  {
             setState(() {
               showLoading = true;
             });
+            FirebaseFirestore roofRef = FirebaseFirestore.instance;
+            CollectionReference alluserRef = roofRef.collection('Users');
+            Query phonenumberQuery = alluserRef.where("Phone",isEqualTo: phoneController.text);
+            phonenumberQuery.snapshots().listen(
+                    (event) async {
+                      if(event.docs.length == 0)
+                        {
+                          showAlertDialog(context);
+                        }
+                      else {
+                        await _auth.verifyPhoneNumber(
+                          phoneNumber: phoneController.text,
+                          verificationCompleted: (phoneAuthCredential) async {
+                            setState(() {
+                              showLoading = false;
+                            });
+                            //signInWithPhoneAuthCredential(phoneAuthCredential);
+                          },
+                          verificationFailed: (verificationFailed) async {
+                            setState(() {
+                              showLoading = false;
+                            });
+                            _scaffoldKey.currentState.showSnackBar(
+                                SnackBar(content: Text(verificationFailed.message)));
+                          },
+                          codeSent: (verificationId, resendingToken) async {
+                            setState(() {
+                              showLoading = false;
+                              currentState = MobileVerificationState.SHOW_OTP_FORM_STATE;
+                              this.verificationId = verificationId;
+                            });
+                          },
+                          codeAutoRetrievalTimeout: (verificationId) async {},
+                        );
+                      }
+                    });
 
-            await _auth.verifyPhoneNumber(
-              phoneNumber: phoneController.text,
-              verificationCompleted: (phoneAuthCredential) async {
-                setState(() {
-                  showLoading = false;
-                });
-                //signInWithPhoneAuthCredential(phoneAuthCredential);
-              },
-              verificationFailed: (verificationFailed) async {
-                setState(() {
-                  showLoading = false;
-                });
-                _scaffoldKey.currentState.showSnackBar(
-                    SnackBar(content: Text(verificationFailed.message)));
-              },
-              codeSent: (verificationId, resendingToken) async {
-                setState(() {
-                  showLoading = false;
-                  currentState = MobileVerificationState.SHOW_OTP_FORM_STATE;
-                  this.verificationId = verificationId;
-                });
-              },
-              codeAutoRetrievalTimeout: (verificationId) async {},
-            );
-          },
+            },
           child: Text("SEND OTP"),
           color: Colors.red,
           textColor: Colors.white,
@@ -114,6 +161,7 @@ class _NumberVerifyState extends State<NumberVerify> {
       ],
     );
   }
+
 
   getOtpFormWidget(context) {
     return Column(
@@ -133,6 +181,7 @@ class _NumberVerifyState extends State<NumberVerify> {
             PhoneAuthCredential phoneAuthCredential =
             PhoneAuthProvider.credential(
                 verificationId: verificationId, smsCode: otpController.text);
+
             signInWithPhoneAuthCredential(phoneAuthCredential);
           },
           child: Text("VERIFY"),
@@ -148,6 +197,7 @@ class _NumberVerifyState extends State<NumberVerify> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,

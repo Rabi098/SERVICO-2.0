@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
     UserController userController=Get.put(UserController(),tag: "user_controller");
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: LandingPage(auth: Auth(),),
      );
   }
