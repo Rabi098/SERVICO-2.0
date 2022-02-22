@@ -86,6 +86,9 @@ class DatabaseMethods {
       'status':status,
       'orderDate':orderTime,
       'time':time,
+      'startdatetime':null,
+      'enddatetime':null,
+      'distance':4.3,
       'Image':['s','b'],
 
     }).catchError((e){
