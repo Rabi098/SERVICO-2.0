@@ -22,15 +22,6 @@ class _MainDrawerState extends State<MainDrawer> {
     // TODO: implement initState
     super.initState();
   }
-  // USer data;
-  // void hello() async {
-  //   DatabaseMethods obj = DatabaseMethods();
-  //   data = await obj.getUser(widget._auth.currentUser.uid);
-  //   setState(() {
-  //     value = true;
-  //   });
-  //
-  // }
 
   Future<void> _signout () async {
     try{
