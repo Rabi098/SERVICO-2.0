@@ -1,16 +1,37 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:plumbify/Controller/UserController.dart';
+import 'package:plumbify/model/user.dart';
 import 'package:plumbify/services/auth_services.dart';
+import 'package:plumbify/services/database.dart';
 
 class MainDrawer extends StatefulWidget {
   MainDrawer({@required this.auth});
   final AuthBase auth;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  UserController userController = Get.find(tag:'user_controller');
   @override
   _MainDrawerState createState() => _MainDrawerState();
 }
 
 class _MainDrawerState extends State<MainDrawer> {
+  bool value=false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+  // USer data;
+  // void hello() async {
+  //   DatabaseMethods obj = DatabaseMethods();
+  //   data = await obj.getUser(widget._auth.currentUser.uid);
+  //   setState(() {
+  //     value = true;
+  //   });
+  //
+  // }
+
   Future<void> _signout () async {
     try{
       await widget.auth.signOut();
@@ -19,6 +40,7 @@ class _MainDrawerState extends State<MainDrawer> {
       print(e.toString());
     }
   }
+
 
   // Future<void> _getcurrentuser() async {
   //   try{
@@ -41,15 +63,15 @@ class _MainDrawerState extends State<MainDrawer> {
             padding: EdgeInsets.all(20),
             alignment: Alignment.centerLeft,
             child: Text(
-              'Hello! ${widget._auth.currentUser.displayName}',
+              'Hello! ${widget.userController.user.value.name}',
               style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 28,
                   color: Theme.of(context).primaryColor),
-            ),
+            )
           ),
           UserAccountsDrawerHeader(
-            accountName: Text("${widget._auth.currentUser.displayName}"),
+            accountName: Text(widget.userController.user.value.name),
             accountEmail: Text("${widget._auth.currentUser.email}" != "null"? widget.auth.currentUser.email : "Welcome!"),
             currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage('https://library.kissclipart.com/20180830/rtq/kissclipart-user-profile-clipart-user-profile-computer-icons-9fa0da1213c19b67.jpg')),

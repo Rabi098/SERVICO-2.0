@@ -22,6 +22,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+
   UserController userController = Get.find(tag:'user_controller');
   TextEditingController displayNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();

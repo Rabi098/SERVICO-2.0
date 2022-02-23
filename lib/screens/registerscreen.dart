@@ -315,21 +315,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     .then((usercred) async =>
                                 {
                                   //sign in was success
-                                  usercred.user.updateProfile(displayName: nameController.text),
+                                usercred.user.updateProfile(displayName: nameController.text),
                                   if (usercred != null)
                                     {
-                                      userController.postUser(USer(uid: usercred.user.uid,
+                                      setState(()
+                                      {
+                                        FirebaseFirestore roofRef = FirebaseFirestore.instance;
+                                        CollectionReference alluserRef = roofRef.collection('Users');
+                                        Query phonenumberQuery = alluserRef.where("Phone", isEqualTo: usercred.user.phoneNumber);
+                                        phonenumberQuery.snapshots().listen(
+                                                (event) async {
+                                              if (event.docs.length == 0) {
+                                                userController.postUser(USer(uid: usercred.user.uid,
 
-                                        profile_pic: usercred.user.photoURL,
-                                        phone: "+92"+cellnumberController.text,
-                                        nearby_address: '',
-                                        geoPoint: GeoPoint(0,0),
-                                        full_address: '',
-                                        email: '',
-                                        name: nameController.text,
-                                        reward: "0",
+                                                  profile_pic: usercred.user.photoURL,
+                                                  phone: "+92"+cellnumberController.text,
+                                                  nearby_address: '',
+                                                  geoPoint: GeoPoint(0,0),
+                                                  full_address: '',
+                                                  email: '',
+                                                  name: nameController.text,
+                                                  reward: "0",
 
-                                      ),),
+                                                ),);
+                                              }
+                                            });
+                                      }),
                                       //store registration details in firestore database
                                       // await _firestore
                                       //     .collection('Users')
@@ -358,11 +369,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         false;
                                       }),
 
-
-                                      setState(() {
-                                        isLoading = false;
-                                        isResend = false;
-                                      }),
                                       Navigator.pop(context),
                                       Navigator.push(
                                         context,
@@ -480,21 +486,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         _auth.signInWithCredential(phoneAuthCredential).then((usercred) async =>
         {
+          usercred.user.updateProfile(displayName: nameController.text),
           if (usercred != null)
             {
+              setState(()
+        {
+          FirebaseFirestore roofRef = FirebaseFirestore.instance;
+          CollectionReference alluserRef = roofRef.collection('Users');
+          Query phonenumberQuery = alluserRef.where("Phone", isEqualTo: usercred.user.phoneNumber);
+          phonenumberQuery.snapshots().listen(
+                  (event) async {
+                if (event.docs.length == 0) {
+                  userController.postUser(USer(uid: usercred.user.uid,
+
+                    profile_pic: usercred.user.photoURL,
+                    phone: "+92"+cellnumberController.text,
+                    nearby_address: '',
+                    geoPoint: GeoPoint(0,0),
+                    full_address: '',
+                    email: '',
+                    name: nameController.text,
+                    reward: "0",
+
+                  ),);
+                }
+              });
+        }),
               //store registration details in firestore database
-              userController.postUser(USer(uid: usercred.user.uid,
-
-                profile_pic: usercred.user.photoURL,
-                phone: "+92"+cellnumberController.text,
-                nearby_address: '',
-                geoPoint: GeoPoint(0,0),
-                full_address: '',
-                email: '',
-                name: nameController.text,
-                reward: "0",
-
-              ),),
 
               //then move to authorised area
               setState(() {
