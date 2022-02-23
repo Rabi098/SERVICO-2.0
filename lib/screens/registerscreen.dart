@@ -327,6 +327,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         full_address: '',
                                         email: '',
                                         name: nameController.text,
+                                        reward: "0",
 
                                       ),),
                                       //store registration details in firestore database
@@ -491,6 +492,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 full_address: '',
                 email: '',
                 name: nameController.text,
+                reward: "0",
 
               ),),
 

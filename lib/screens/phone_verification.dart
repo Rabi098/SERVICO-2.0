@@ -130,7 +130,8 @@ class _NumberVerifyState extends State<NumberVerify> {
                     }
                   },
                   onChanged: (value) {
-                    _phone = value;
+                    _phone = "+92"+value;
+                    print(_phone);
                     _trySubmitForm();
                   },
                   keyboardType: TextInputType.phone,
@@ -163,7 +164,7 @@ class _NumberVerifyState extends State<NumberVerify> {
                         showAlertDialog(context);
                       }
                       else {
-                        var phoneNumber = "+92"+_phone;
+                        var phoneNumber = _phone;
                         await _auth.verifyPhoneNumber(
                           phoneNumber: phoneNumber,
                           verificationCompleted: (phoneAuthCredential) async {

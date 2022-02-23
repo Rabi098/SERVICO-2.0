@@ -58,7 +58,7 @@ class _RewardsState extends State<Rewards> {
                     String points = "0";
                     try {
                       data = snapshot.requireData;
-                      points = data['Points'];
+                      points = data['Reward_Points'];
                     } catch (e) {
                       print(e);
                     }

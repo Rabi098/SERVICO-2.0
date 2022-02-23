@@ -32,6 +32,7 @@ class DatabaseMethods {
         phone: documentData['Phone'],
         profile_pic: documentData['profilePic'],
         uid: documentData['uid'],
+        reward: documentData['Reward_Points']
       );
 
       print('----------------------------Return uSer-------------------------'+uSer.toString()+uSer.email);
@@ -62,7 +63,8 @@ class DatabaseMethods {
       'profilePic':user.profile_pic!=null?user.profile_pic:'https://upload.wikimedia.org/wikipedia/commons/4/41/Profile-720.png',
       'workerLocation':user.geoPoint,
       'full_address':user.full_address,
-      'nearby_address':user.nearby_address
+      'nearby_address':user.nearby_address,
+      'Reward_Points': user.reward
 
     }).catchError((e){
       print("--------------------------------------------------------------------------------------------");
