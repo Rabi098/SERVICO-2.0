@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
@@ -15,7 +16,7 @@ enum MobileVerificationState {
 
 class NumberVerify extends StatefulWidget {
   NumberVerify(
-  {this.auth}
+      {this.auth}
       );
   AuthBase auth;
 
@@ -27,7 +28,8 @@ class _NumberVerifyState extends State<NumberVerify> {
   MobileVerificationState currentState =
       MobileVerificationState.SHOW_MOBILE_FORM_STATE;
 
-  final phoneController = TextEditingController();
+  //final phoneController = TextEditingController();
+  String _phone = '';
   final otpController = TextEditingController();
 
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -53,9 +55,9 @@ class _NumberVerifyState extends State<NumberVerify> {
         Navigator.push(context, MaterialPageRoute(builder: (context)=> LandingPage(auth: widget.auth)));
       }
       else
-        {
-         //showAlertDialog(context);
-        }
+      {
+        //showAlertDialog(context);
+      }
 
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -65,6 +67,11 @@ class _NumberVerifyState extends State<NumberVerify> {
       _scaffoldKey.currentState
           .showSnackBar(SnackBar(content: Text(e.message)));
     }
+  }
+
+  bool _trySubmitForm() {
+    final bool isValid = _formKey.currentState?.validate();
+    return isValid;
   }
 
   showAlertDialog(BuildContext context) {
@@ -96,37 +103,69 @@ class _NumberVerifyState extends State<NumberVerify> {
     );
   }
 
+
+
   getMobileFormWidget(context) {
-    return Column(
-      children: [
-        Spacer(),
-        TextField(
-          controller: phoneController,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-            hintText: "Phone Number",
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          Spacer(),
+          Row(
+            children: <Widget>[
+              Container(
+                  width: 70,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black26),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(child: Text("+92",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),))),
+              SizedBox(width: 10,),
+              Expanded(
+                child: TextFormField(
+                  validator: (value) {
+                    if (value.length > 10) {
+                      return 'Enter valid phone number';
+                    }
+                  },
+                  onChanged: (value) {
+                    _phone = value;
+                    _trySubmitForm();
+                  },
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(20),),
+                    hintText: "Phone Number",
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-        SizedBox(
-          height: 16,
-        ),
-        FlatButton(
-          onPressed: ()  {
-            setState(() {
-              showLoading = true;
-            });
-            FirebaseFirestore roofRef = FirebaseFirestore.instance;
-            CollectionReference alluserRef = roofRef.collection('Users');
-            Query phonenumberQuery = alluserRef.where("Phone",isEqualTo: phoneController.text);
-            phonenumberQuery.snapshots().listen(
-                    (event) async {
+
+          SizedBox(
+            height: 16,
+          ),
+          FlatButton(
+            onPressed: ()  {
+              bool value =_trySubmitForm();
+              if(value == true) {
+                setState(() {
+                  showLoading = true;
+                });
+                FirebaseFirestore roofRef = FirebaseFirestore.instance;
+                CollectionReference alluserRef = roofRef.collection('Users');
+                Query phonenumberQuery = alluserRef.where("Phone",isEqualTo: _phone);
+                phonenumberQuery.snapshots().listen(
+                        (event) async {
                       if(event.docs.length == 0)
-                        {
-                          showAlertDialog(context);
-                        }
+                      {
+                        showAlertDialog(context);
+                      }
                       else {
+                        var phoneNumber = "+92"+_phone;
                         await _auth.verifyPhoneNumber(
-                          phoneNumber: phoneController.text,
+                          phoneNumber: phoneNumber,
                           verificationCompleted: (phoneAuthCredential) async {
                             setState(() {
                               showLoading = false;
@@ -151,14 +190,16 @@ class _NumberVerifyState extends State<NumberVerify> {
                         );
                       }
                     });
+              }
 
             },
-          child: Text("SEND OTP"),
-          color: Colors.red,
-          textColor: Colors.white,
-        ),
-        Spacer(),
-      ],
+            child: Text("SEND OTP"),
+            color: Colors.red,
+            textColor: Colors.white,
+          ),
+          Spacer(),
+        ],
+      ),
     );
   }
 
@@ -194,15 +235,15 @@ class _NumberVerifyState extends State<NumberVerify> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.red,
-        title: Text("SignIn with Phone number"),
-      ),
+        appBar: AppBar(
+          backgroundColor: Colors.red,
+          title: Text("SignIn with Phone number"),
+        ),
         key: _scaffoldKey,
         body: Container(
           child: showLoading

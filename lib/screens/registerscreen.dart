@@ -122,7 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         textInputAction: TextInputAction.next,
                         onEditingComplete: () => node.nextFocus(),
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
                             floatingLabelBehavior:
                             FloatingLabelBehavior.never,
                             labelText: 'Name'),
@@ -130,32 +130,71 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (value.isEmpty) {
                             return 'Please enter a name';
                           }
+                          if(value.length < 4)
+                          {
+                            return 'Username must be four character long';
+                          }
                         },
                       ),
                     ),
-                    Container(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 10.0),
+                    Row(
+                      children: [
+                        Container(
+                            width: 70,
+                            height: 55,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black26),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Center(child: Text("+92",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),))),
+                        SizedBox(width: 10,),
+                        Expanded(
                           child: TextFormField(
-                            enabled: !isLoading,
-                            keyboardType: TextInputType.phone,
                             controller: cellnumberController,
-                            textInputAction: TextInputAction.done,
-                            onFieldSubmitted: (_) => node.unfocus(),
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                                hintText: 'Phone Number',
-                                floatingLabelBehavior:
-                                FloatingLabelBehavior.never,
-                                labelText: 'Phone Number'),
                             validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Please enter a phone number';
+                              if (value.length != 10) {
+                                return 'Enter valid phone number';
                               }
-                            },
+                              if (value.isEmpty) {
+                              return 'Enter phone number first';
+                              }
+                              },
+
+                            keyboardType: TextInputType.phone,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(20),),
+                              hintText: "Phone Number",
+                            ),
                           ),
-                        )),
+                        ),
+                      ],
+                    ),
+                    // Container(
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.symmetric(
+                    //           vertical: 10.0, horizontal: 10.0),
+                    //       child: TextFormField(
+                    //         enabled: !isLoading,
+                    //         keyboardType: TextInputType.phone,
+                    //         controller: cellnumberController,
+                    //         textInputAction: TextInputAction.done,
+                    //         onFieldSubmitted: (_) => node.unfocus(),
+                    //         decoration: InputDecoration(
+                    //             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                    //             hintText: 'Phone Number',
+                    //             floatingLabelBehavior:
+                    //             FloatingLabelBehavior.never,
+                    //             labelText: 'Phone Number'),
+                    //         validator: (value) {
+                    //           if (value.isEmpty) {
+                    //             return 'Please enter a phone number';
+                    //           }
+                    //           if (value.length > 10) {
+                    //             return 'Enter valid phone number';
+                    //           }
+                    //         },
+                    //       ),
+                    //     )),
                     SizedBox(height: 20,),
                     GestureDetector(
                       onTap: () {
@@ -172,8 +211,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       },
                       child: new Container(
                         decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(20)
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(20)
                         ),
                         width: 100,
                         height: 50,
@@ -276,13 +315,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     .then((usercred) async =>
                                 {
                                   //sign in was success
-                                usercred.user.updateProfile(displayName: nameController.text),
+                                  usercred.user.updateProfile(displayName: nameController.text),
                                   if (usercred != null)
                                     {
                                       userController.postUser(USer(uid: usercred.user.uid,
 
                                         profile_pic: usercred.user.photoURL,
-                                        phone: cellnumberController.text,
+                                        phone: "+92"+cellnumberController.text,
                                         nearby_address: '',
                                         geoPoint: GeoPoint(0,0),
                                         full_address: '',
@@ -310,13 +349,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       //         true)).then(
                                       //         (value) =>
                                       //     {
-                                            //then move to authorised area
-                                            setState(() {
-                                              isLoading =
-                                              false;
-                                              isResend =
-                                              false;
-                                            }),
+                                      //then move to authorised area
+                                      setState(() {
+                                        isLoading =
+                                        false;
+                                        isResend =
+                                        false;
+                                      }),
 
 
                                       setState(() {
@@ -430,7 +469,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       isLoading = true;
     });
     debugPrint('Gideon test 1');
-    var phoneNumber = cellnumberController.text.toString();
+    var phoneNumber = "+92"+cellnumberController.text.toString();
     debugPrint('Gideon test 2');
     var verifyPhoneNumber = _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
@@ -443,34 +482,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
           if (usercred != null)
             {
               //store registration details in firestore database
-            userController.postUser(USer(uid: usercred.user.uid,
+              userController.postUser(USer(uid: usercred.user.uid,
 
-              profile_pic: usercred.user.photoURL,
-              phone: cellnumberController.text,
-              nearby_address: '',
-              geoPoint: GeoPoint(0,0),
-              full_address: '',
-              email: '',
-              name: nameController.text,
+                profile_pic: usercred.user.photoURL,
+                phone: "+92"+cellnumberController.text,
+                nearby_address: '',
+                geoPoint: GeoPoint(0,0),
+                full_address: '',
+                email: '',
+                name: nameController.text,
 
-        ),),
+              ),),
 
-                //then move to authorised area
-                setState(() {
-                  isLoading = false;
-                  isRegister = false;
-                  isOTPScreen = false;
+              //then move to authorised area
+              setState(() {
+                isLoading = false;
+                isRegister = false;
+                isOTPScreen = false;
 
-                  //navigate to is
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          LandingPage(auth: widget.auth,),
-                    ),
+                //navigate to is
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        LandingPage(auth: widget.auth,),
+                  ),
 
-                  );
-                })
+                );
+              })
 
               //     .catchError((onError) =>
               // {
