@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:plumbify/screens/phone_verification.dart';
-import 'package:plumbify/screens/registerscreen.dart';
+import 'package:plumbify/Login%20Work/phone_verification.dart';
+import 'package:plumbify/Login%20Work/registerscreen.dart';
 import '../services/auth_services.dart';
 import 'package:plumbify/screens/login_page_flow.dart';
 

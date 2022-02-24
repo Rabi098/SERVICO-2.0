@@ -1,20 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-class OrderHistory extends StatefulWidget {
+class OrderInProcess extends StatefulWidget {
 
-  final now = DateTime.now();
   @override
-  _OrderHistoryState createState() => _OrderHistoryState();
+  _OrderInProcessState createState() => _OrderInProcessState();
 }
 
-class _OrderHistoryState extends State<OrderHistory> {
+class _OrderInProcessState extends State<OrderInProcess> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemCount: 10,
+    return ListView.builder(itemCount: 5,
       itemBuilder: (BuildContext context, index){
         return Container(
           height: 150,
-          margin: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+          margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
           child: Card(
             elevation: 5,
             child: Row(

@@ -1,5 +1,5 @@
 import 'package:plumbify/screens/packages.dart';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import 'app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:plumbify/services/auth_services.dart';
@@ -13,6 +13,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  int currentPos = 0;
+  List<String> listPaths = [
+    "assets/electricianpic.jpg",
+    "assets/plumberpic.png",
+    "assets/plumberpic2.png"
+  ];
 
 
   Widget promoCard(String image) {
@@ -83,6 +90,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       // appBar: AppBar(
       //   title: Text("SERVICO"),
       //   actions: <Widget>[
@@ -101,52 +109,94 @@ class _HomeState extends State<Home> {
                     color: Colors.white,
                     borderRadius:
                     BorderRadius.vertical(bottom: Radius.circular(30))),
-                padding: EdgeInsets.all(20.0),
+                //padding: EdgeInsets.all(10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      'Get it Done!',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold),
+                    // Container(
+                    //   padding: EdgeInsets.all(5),
+                    //   decoration: BoxDecoration(
+                    //       color: Color.fromRGBO(244, 243, 243, 1),
+                    //       borderRadius: BorderRadius.circular(15)),
+                    //   child: TextField(
+                    //     decoration: InputDecoration(
+                    //         border: InputBorder.none,
+                    //         prefixIcon: Icon(
+                    //           Icons.search,
+                    //           color: Colors.black87,
+                    //         ),
+                    //         hintText: "Search you're looking for",
+                    //         hintStyle:
+                    //         TextStyle(color: Colors.grey, fontSize: 15)),
+                    //   ),
+                    // ),
+                CarouselSlider(
+                  items: [
+                    //1st Image of Slider
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Image.asset(listPaths[0],fit: BoxFit.fill,),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Image.asset(listPaths[1],fit: BoxFit.fill),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Image.asset(listPaths[2],fit: BoxFit.fill),
+                    ),
+                  ],
+                  //Slider Container properties
+                  options: CarouselOptions(
+                    onPageChanged: (index , reason) {
+                      setState(() {
+                        currentPos = index;
+                      });
+                    },
+                    autoPlay: true,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enableInfiniteScroll: true,
+                    viewportFraction:1,
+                  ),),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: listPaths.map((url) {
+                    int index = listPaths.indexOf(url);
+                    return Container(
+                      width: 20.0,
+                      height: 10.0,
+                      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: currentPos == index
+                            ? Colors.black
+                            : Color.fromRGBO(0, 0, 0, 0.4),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                    Center(
+                      child: Text(
+                        'Get it Done!',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                     SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      'on Just Few Taps',
-                      style: TextStyle(color: Colors.black87, fontSize: 25),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(244, 243, 243, 1),
-                          borderRadius: BorderRadius.circular(15)),
-                      child: TextField(
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            prefixIcon: Icon(
-                              Icons.search,
-                              color: Colors.black87,
-                            ),
-                            hintText: "Search you're looking for",
-                            hintStyle:
-                            TextStyle(color: Colors.grey, fontSize: 15)),
+                    Center(
+                      child: Text(
+                        'on Just Few Taps',
+                        style: TextStyle(color: Colors.black87, fontSize: 25),
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
+
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 20,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),

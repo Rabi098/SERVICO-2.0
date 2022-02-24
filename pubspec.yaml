@@ -38,6 +38,7 @@ dependencies:
   flutter_staggered_grid_view: ^0.4.1
   google_fonts: ^1.0.0
   get: 4.1.1
+  carousel_slider: ^4.0.0
 
 
 
@@ -73,6 +74,9 @@ flutter:
     - assets/destination_map_marker.png
     - assets/driving_pin.png
     - assets/coin.jpg
+    - assets/electricianpic.jpg
+    - assets/plumberpic.png
+    - assets/plumberpic2.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

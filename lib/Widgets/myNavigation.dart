@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:plumbify/screens/app_drawer.dart';
 import 'package:plumbify/screens/homepage.dart';
+import 'package:plumbify/screens/profile.dart';
 import 'package:plumbify/services/auth_services.dart';
+
+import 'OrderDetailsTabs.dart';
 
 class MyNavigationBar extends StatefulWidget {
   MyNavigationBar({@required this.auth,});
@@ -25,8 +28,8 @@ class _MyNavigationBarState extends State<MyNavigationBar > {
 
   void myfunc() {
     _widgetOptions.add(Home(auth: widget.auth));
-    _widgetOptions.add(Text("profile"));
-    _widgetOptions.add(Text("Search"));
+    _widgetOptions.add(OrderDetails());
+    _widgetOptions.add(Profile(auth: widget.auth));
   }
   @override
   void initState() {
@@ -38,6 +41,7 @@ class _MyNavigationBarState extends State<MyNavigationBar > {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text("SERVICO"),
         actions: <Widget>[
           IconButton(onPressed:(){ Navigator.of(context).pushNamed('location');}, icon: Icon(Icons.location_pin,color: Colors.white,))
@@ -56,8 +60,8 @@ class _MyNavigationBarState extends State<MyNavigationBar > {
                 backgroundColor: Colors.green
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.search,color: Colors.white,),
-                title: Text('Search',style: TextStyle(color: Colors.white,fontSize: 16),),
+                icon: Icon(Icons.article,color: Colors.white,),
+                title: Text('Orders',style: TextStyle(color: Colors.white,fontSize: 16),),
                 backgroundColor: Colors.yellow
             ),
             BottomNavigationBarItem(

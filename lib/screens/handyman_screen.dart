@@ -31,87 +31,92 @@ class _HandymanScreenState extends State<HandymanScreen> {
         ],*/
         ),
 
-        body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                height: 300,
-                width: double.infinity,
-                child: Image.network(
-                  //imageURL
-                  obj.profilePic,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Expanded(
-
-                  child: ListView(
-                    padding: EdgeInsets.all(15),
-                      children: <Widget>[
-
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: 15),
-                          child: Text('${obj.name}',
-                              style:
-                              TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: 15),
-                          child: Text('Price: ${obj.price.toString()}',
-                              style:
-                              TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
-                        ),
-                        Container(
-                      margin: EdgeInsets.symmetric(
-                           vertical: 15),
-                      child: Text('Description',
-                          style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+        body: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    height: 300,
+                    width: double.infinity,
+                    child: Image.network(
+                      //imageURL
+                      obj.profilePic,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  Text(
-                        obj.desc,
-                        style: TextStyle(fontSize: 18),
-                      ),
                   Expanded(
-                    child: Container(
-                        width: double.infinity,
-                        margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pushNamed('bookingdetails',arguments: {'handyman':obj});
-                          },
-                          child: Container(
-                            width: 200,
-                            height: 50,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.only(bottom: 3,top: 3),
-                            child: Text(
-                              'Book Now',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white
+
+                      child: ListView(
+                        padding: EdgeInsets.all(15),
+                          children: <Widget>[
+
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 15),
+                              child: Text('${obj.name}',
+                                  style:
+                                  TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 15),
+                              child: Text('Price: ${obj.price.toString()}',
+                                  style:
+                                  TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                            ),
+                            Container(
+                          margin: EdgeInsets.symmetric(
+                               vertical: 15),
+                          child: Text('Description',
+                              style:
+                              TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                      ),
+                      Text(
+                            obj.desc,
+                            style: TextStyle(fontSize: 18),
+                          ),
+                      Expanded(
+                        child: Container(
+                            width: double.infinity,
+                            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushNamed('bookingdetails',arguments: {'handyman':obj});
+                              },
+                              child: Container(
+                                width: 200,
+                                height: 50,
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.only(bottom: 3,top: 3),
+                                child: Text(
+                                  'Book Now',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white
+
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.all(Radius.circular(24))),
 
                               ),
-                            ),
-                            decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.all(Radius.circular(24))),
+                            )
 
-                          ),
-                        )
-
-                    ),
-                    flex: 10,
-                    ),
+                        ),
+                        flex: 10,
+                        ),
 
 
 
 
-                  ])
-              ),
-            ]),
+                      ])
+                  ),
+                ]),
+          ),
+        ),
 
 
     //FloatingActionButton(onPressed: () {

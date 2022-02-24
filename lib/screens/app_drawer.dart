@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:plumbify/Controller/UserController.dart';
+import 'package:plumbify/Widgets/OrderDetailsTabs.dart';
 import 'package:plumbify/model/user.dart';
 import 'package:plumbify/services/auth_services.dart';
 import 'package:plumbify/services/database.dart';
@@ -106,7 +107,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               onTap: () {
-                Navigator.of(context).pushNamed('orderhistory');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetails()));
               }),
 
 

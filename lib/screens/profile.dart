@@ -110,8 +110,9 @@ class _ProfileState extends State<Profile> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Profile'), ),
+
+      // appBar: AppBar(
+      //   title: Text('Edit Profile'), ),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: GestureDetector(

@@ -4,10 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:plumbify/Login%20Work/landing_page.dart';
 import 'package:plumbify/screens/homepage.dart';
-import 'package:plumbify/screens/registerscreen.dart';
+import 'package:plumbify/Login%20Work/registerscreen.dart';
 import 'package:plumbify/services/auth_services.dart';
 
-import 'login_page_flow.dart';
+import '../screens/login_page_flow.dart';
 
 enum MobileVerificationState {
   SHOW_MOBILE_FORM_STATE,
@@ -52,6 +52,7 @@ class _NumberVerifyState extends State<NumberVerify> {
       });
 
       if(authCredential?.user != null){
+        Navigator.pop(context);
         Navigator.push(context, MaterialPageRoute(builder: (context)=> LandingPage(auth: widget.auth)));
       }
       else

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:plumbify/Controller/UserController.dart';
 import 'package:plumbify/model/user.dart';
-import 'package:plumbify/screens/phone_verification.dart';
+import 'package:plumbify/Login%20Work/phone_verification.dart';
 abstract class AuthBase {
 
   User get currentUser;
