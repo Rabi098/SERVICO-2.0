@@ -335,7 +335,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                   full_address: '',
                                                   email: '',
                                                   name: nameController.text,
-                                                  reward: "0",
+                                                  reward: 0,
 
                                                 ),);
                                               }
@@ -506,7 +506,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     full_address: '',
                     email: '',
                     name: nameController.text,
-                    reward: "0",
+                    reward: 0,
 
                   ),);
                 }
@@ -521,6 +521,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 isOTPScreen = false;
 
                 //navigate to is
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(

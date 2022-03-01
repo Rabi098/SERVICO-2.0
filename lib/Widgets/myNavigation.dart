@@ -28,7 +28,7 @@ class _MyNavigationBarState extends State<MyNavigationBar > {
 
   void myfunc() {
     _widgetOptions.add(Home(auth: widget.auth));
-    _widgetOptions.add(OrderDetails());
+    _widgetOptions.add(OrderDetails(auth: widget.auth,));
     _widgetOptions.add(Profile(auth: widget.auth));
   }
   @override

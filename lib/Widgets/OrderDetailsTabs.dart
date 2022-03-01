@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:plumbify/screens/order_history.dart';
 import 'package:plumbify/screens/order_inprogress.dart';
+import 'package:plumbify/services/auth_services.dart';
 
 class OrderDetails extends StatefulWidget {
-
+  AuthBase auth;
+  OrderDetails({this.auth});
   @override
   _OrderDetailsState createState() => _OrderDetailsState();
 }
@@ -35,7 +37,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         body: TabBarView(
           children: [
             OrderInProcess(),
-            OrderHistory(),
+            OrderHistory(auth: widget.auth),
           ],
         ),
       ),

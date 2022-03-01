@@ -8,9 +8,9 @@ class USer {
   String profile_pic;
   String full_address;
   String nearby_address;
-  String reward;
+  int reward;
   GeoPoint geoPoint;
-  USer({this.uid,this.email,this.name,this.phone,this.profile_pic,this.geoPoint,this.full_address,this.nearby_address,this.reward});
+  USer({this.uid,this.email,this.name,this.phone,this.profile_pic,this.geoPoint,this.full_address,this.nearby_address,@required this.reward});
   @override
 
 

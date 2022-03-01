@@ -23,14 +23,9 @@ class UserController extends GetxController{
        user.value = temp;
   }
 
-  Future<bool> putUser(USer temp)async{
-    //var response = await Backend_Service().putAddress(temp);
-    // if(response.statusCode==200){
-    //   address.value = temp;
-    //   return true;
-    // }else{
-    //   return false;
-    // }
+
+  Future<bool> updateUser()async{
+    await DatabaseMethods().addUser(user.value);
   }
 
 

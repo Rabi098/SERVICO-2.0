@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,34 +9,27 @@ import 'package:plumbify/screens/polylineView.dart';
 import 'package:plumbify/services/auth_services.dart';
 import 'package:plumbify/services/database.dart';
 import '../utils/CustomTextStyles.dart';
-bool value = false;
-class BookingDetails extends StatefulWidget {
+
+class PkgBooking extends StatefulWidget {
   final AuthBase auth;
-   BookingDetails({Key key, @required this.auth}) : super(key: key);
+  int index;
+  QuerySnapshot data;
+  PkgBooking({Key key, @required this.auth,this.data,this.index}) : super(key: key);
   UserController userController;
 
   @override
-  _BookingDetailsState createState() => _BookingDetailsState();
+  _PkgBookingState createState() => _PkgBookingState();
 }
 
-class _BookingDetailsState extends State<BookingDetails> {
-  final enteredpoints = TextEditingController();
+class _PkgBookingState extends State<PkgBooking> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-  }
-
-  @override
   Widget build(BuildContext context) {
-     widget.userController = Get.find(tag:'user_controller');
+    widget.userController = Get.find(tag:'user_controller');
 
-    final args= ModalRoute.of(context).settings.arguments as Map<String, Handyman>;
-    Handyman obj = args['handyman'];
-
+    // final args= ModalRoute.of(context).settings.arguments as Map<String, Handyman>;
+    // Handyman obj = args['handyman'];
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -55,14 +47,14 @@ class _BookingDetailsState extends State<BookingDetails> {
         return Column(
           children: <Widget>[
             Expanded(
-              child: ListView(
-                children: <Widget>[
-                  mapsWidget(context,widget.userController.user.value.geoPoint,obj.location),
-                  selectedAddressSection(),
-                  //imagesTileWidget(context),
-                  taskDescription(),
-                  priceSection(obj.price)
-                ],
+              child: Container(
+                child: ListView(
+                  children: <Widget>[
+                    selectedAddressSection(),
+                    taskDescription(),
+                    priceSection(int.parse(widget.data.docs[widget.index]["Price"]))
+                  ],
+                ),
               ),
               flex: 90,
             ),
@@ -71,33 +63,19 @@ class _BookingDetailsState extends State<BookingDetails> {
                   width: double.infinity,
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: updateButton(context, 'Confirm', (){
-                      var userentered = int.parse(enteredpoints.text);
-                      print(userentered);
-                      var currentpoints = widget.userController.user.value.reward;
-                      print(currentpoints);
-                      if(currentpoints >= userentered)
-                        {
-                          setState(() {
-                            value = true;
-                            print("hello");
-                          });
-                          widget.userController.user.value.reward = currentpoints - userentered;
-                          widget.userController.updateUser();
-                        }
+                    DateTime today = DateTime.now();
+                    var x = DatabaseMethods().addPkgOrder(widget.data.docs[widget.index].id,widget.data.docs[widget.index]['Price'],widget.auth.currentUser.uid,GeoPoint(0,0),'Pending',today,today);
+                    print('Afterr*************************************');
+                    if(x == true){
+                      //Navigator.of(context).pushNamed('isOrderPlaced',arguments: {'isPlaced':true});
+                      Navigator.of(context).popAndPushNamed('isOrderPlaced',arguments: {'isPlaced':true});
+                    }else
+                    {
 
-                      DateTime today = DateTime.now();
-                      var x = DatabaseMethods().addOrder('',widget.auth.currentUser.uid, GeoPoint(0,0),GeoPoint(obj.location.latitude, obj.location.longitude), obj.id, 'Pending', today,today,value? userentered : 0);
-                      print('Afterr*************************************');
-                      if(x == true){
-                        //Navigator.of(context).pushNamed('isOrderPlaced',arguments: {'isPlaced':true});
-                        Navigator.of(context).popAndPushNamed('isOrderPlaced',arguments: {'isPlaced':true});
-                      }else
-                        {
+                      Navigator.of(context).popAndPushNamed('isOrderPlaced',arguments: {'isPlaced':false});
+                      //Navigator.of(context).pushNamed('isOrderPlaced',arguments: {'isPlaced':false});
 
-                          Navigator.of(context).popAndPushNamed('isOrderPlaced',arguments: {'isPlaced':false});
-                          //Navigator.of(context).pushNamed('isOrderPlaced',arguments: {'isPlaced':false});
-
-                        }
+                    }
                   })
               ),
               flex: 10,
@@ -116,65 +94,34 @@ class _BookingDetailsState extends State<BookingDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Description\n',style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-          Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',style: TextStyle(fontSize: 12),)
-
-        ],
-      ),
-    );
-  }
-  mapsWidget(BuildContext context, GeoPoint geoPoint, LatLng location){
-    return Container(
-      margin: EdgeInsets.all(10),
-      height: 300,
-      width: double.infinity,
-      alignment: Alignment.center,
-      child: MapPage(SOURCE: LatLng(geoPoint.latitude,geoPoint.longitude),DESTINATION: location,),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10)
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
+          Text(widget.data.docs[widget.index]["Description"],style: TextStyle(fontSize: 16),),
+          SizedBox(height: 20,),
+          Row(
+            children: [
+              Text("Title :",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+              SizedBox(width: 20,),
+              Text(widget.data.docs[widget.index]['Title'],style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.green),),
+            ],
+          ),
+          Row(
+            children: [
+              Text("Price :",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+              SizedBox(width: 20,),
+              Text("Rs:" + widget.data.docs[widget.index]["Price"],style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.green),),
+            ],
+          ),
+          Row(
+            children: [
+              Text("Brand :",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+              SizedBox(width: 20,),
+              Text("Servico",style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color: Colors.green),),
+            ],
           ),
         ],
       ),
     );
   }
 
-  imagesTileWidget(BuildContext context){
-    return Container(
-      margin: EdgeInsets.all(10),
-      height: 300,
-      width: double.infinity,
-      alignment: Alignment.center,
-      child: Text('Images View Goes here'),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10)
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
-          ),
-        ],
-      ),
-    );
-  }
   updateButton(BuildContext context,String title,Function function){
     return GestureDetector(
       onTap: () {
@@ -340,7 +287,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 ],
               ),
               Text(
-                "Date: NULL",
+                "Date: ${DateTime.now()}",
                 style: CustomTextStyle.textFormFieldSemiBold
                     .copyWith(fontSize: 14),
               ),
@@ -409,75 +356,72 @@ class _BookingDetailsState extends State<BookingDetails> {
 
   priceSection(int price) {
     return SingleChildScrollView(
-      child: Card(
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(4))),
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              border: Border.all(color: Colors.grey.shade200)),
-          padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 4,
-              ),
-              Text(
-                "PRICE DETAILS",
-                style: CustomTextStyle.textFormFieldMedium.copyWith(
-                    fontSize: 12,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                height: 4,
-              ),
+      child: Container(
+        margin: EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+        ),
+        child: Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(4))),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+                border: Border.all(color: Colors.grey.shade200)),
+            padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  "PRICE DETAILS",
+                  style: CustomTextStyle.textFormFieldMedium.copyWith(
+                      fontSize: 12,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Charges (Hourly)",
-                    style: CustomTextStyle.textFormFieldSemiBold
-                        .copyWith(color: Colors.black, fontSize: 12),
-                  ),
-                  Text(
-                    getFormattedCurrency(price),
-                    style: CustomTextStyle.textFormFieldMedium
-                        .copyWith(color: Colors.black, fontSize: 12),
-                  )
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Use Reward Points",style:  CustomTextStyle.textFormFieldSemiBold
-                      .copyWith(color: Colors.black, fontSize: 12),),
-                  ConstrainedBox(
-                      constraints: const BoxConstraints.tightFor(width: 60,height: 30),
-                      child: TextField(
-                        controller: enteredpoints,
-                        keyboardType: TextInputType.number,
-                        maxLines: 1,
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black, width: 1.0),
-                          ),
-                        ),
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.black
-                          )
-                      )
-                  )
-                ],
-              )
-            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Package (Assets Included): ",
+                      style: CustomTextStyle.textFormFieldSemiBold
+                          .copyWith(color: Colors.black, fontSize: 12),
+                    ),
+                    Text(
+                      getFormattedCurrency(price),
+                      style: CustomTextStyle.textFormFieldMedium
+                          .copyWith(color: Colors.black, fontSize: 12),
+                    )
+                  ],
+                ),
+                SizedBox(height: 10,),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     Text("Use Reward Points",style:  CustomTextStyle.textFormFieldSemiBold
+                //         .copyWith(color: Colors.black, fontSize: 12),),
+                //     TextField(
+                //       keyboardType: TextInputType.number,
+                //       decoration: InputDecoration(
+                //         border: OutlineInputBorder(
+                //           borderSide: BorderSide(color: Colors.black)
+                //         )
+                //       ),
+                //     )
+                //   ],
+                // )
+              ],
+            ),
           ),
         ),
       ),

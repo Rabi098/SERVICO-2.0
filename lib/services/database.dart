@@ -76,10 +76,11 @@ class DatabaseMethods {
     return is_Added;
   }
 
-  addOrder(String amount, String customerId, GeoPoint customerLocation,GeoPoint  handmanLocation, String handymanId, String status, DateTime orderTime,DateTime time) async{
+  addOrder(String amount, String customerId, GeoPoint customerLocation,GeoPoint  handmanLocation, String handymanId, String status, DateTime orderTime,DateTime time,int user_points) async{
     bool is_Ordered = true;
     var x = Firestore.collection('Orders')
         .add({
+      'TotalTime': "",
       'amount': amount,
       'customerId': customerId,
       'customer_location':customerLocation,
@@ -92,6 +93,7 @@ class DatabaseMethods {
       'enddatetime':null,
       'distance':4.3,
       'Image':['s','b'],
+      'user_points': user_points
 
     }).catchError((e){
       print("--------------------------------------------------------------------------------------------");
@@ -110,6 +112,30 @@ class DatabaseMethods {
     print(x.toString());
     print("--------------------------------------------------------------------------------------------");
     return x;
+  }
+
+  addPkgOrder(String Pkgid, String amount, String customerId, GeoPoint customerLocation, String status, DateTime orderTime,DateTime time) async{
+    bool is_Ordered = true;
+    var x = Firestore.collection('PkgOrders')
+        .add({
+      'Pkgid': Pkgid,
+      'amount': amount,
+      'customerId': customerId,
+      'customer_location':customerLocation,
+      'status':status,
+      'orderDate':orderTime,
+      'time':time,
+      'startdatetime':null,
+      'enddatetime':null,
+
+    }).catchError((e){
+      print("--------------------------------------------------------------------------------------------");
+      is_Ordered =false;
+      print(e.toString());
+      print("--------------------------------------------------------------------------------------------");
+
+    });
+    return is_Ordered;
   }
 
 }

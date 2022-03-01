@@ -55,7 +55,7 @@ class _RewardsState extends State<Rewards> {
                       return Text("Loading");
                     }
                     var data;
-                    String points = "0";
+                    int points = 0;
                     try {
                       data = snapshot.requireData;
                       points = data['Reward_Points'];
@@ -70,7 +70,7 @@ class _RewardsState extends State<Rewards> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset("assets/coin.jpg",width: 40,height: 40,),
-                            Text("$points points",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
+                            Text("${points.toString()} points",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
                           ],),
                         SizedBox(height: 10,),
                         GestureDetector(

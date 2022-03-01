@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:plumbify/Controller/UserController.dart';
-import 'package:plumbify/Widgets/OrderDetailsTabs.dart';
 import 'package:plumbify/model/user.dart';
 import 'package:plumbify/services/auth_services.dart';
 import 'package:plumbify/services/database.dart';
@@ -64,7 +63,7 @@ class _MainDrawerState extends State<MainDrawer> {
           ),
           UserAccountsDrawerHeader(
             accountName: Text(widget.userController.user.value.name),
-            accountEmail: Text("${widget._auth.currentUser.email}" != "null"? widget.auth.currentUser.email : "Welcome!"),
+            accountEmail: Text("${widget.userController.user.value.email}" != "null"? widget.userController.user.value.email : "Welcome!"),
             currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage('https://library.kissclipart.com/20180830/rtq/kissclipart-user-profile-clipart-user-profile-computer-icons-9fa0da1213c19b67.jpg')),
           ),
@@ -107,7 +106,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetails()));
+                Navigator.of(context).pushNamed('orderhistory');
               }),
 
 

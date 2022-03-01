@@ -218,7 +218,7 @@ class _HomeState extends State<Home> {
                             }),
                             SizedBox(height: 15),
                             BuildListTile('assets/deals.jpg','Deals',(){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Packages()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Packages(auth: widget.auth)));
                             }
                             ),
                             SizedBox(height: 70),

@@ -1,8 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:plumbify/screens/PkgOrder.dart';
+import 'package:plumbify/screens/booking_details.dart';
+import 'package:plumbify/screens/rewards.dart';
+import 'package:plumbify/services/auth_services.dart';
 
 class Packages extends StatefulWidget {
+  AuthBase auth;
+  Packages({this.auth});
   @override
   _PackagesState createState() => _PackagesState();
 }
@@ -15,38 +21,7 @@ class _PackagesState extends State<Packages> {
   double topContainer = 0;
 
   List<Widget> itemsData = [];
-  static const Package_data = [
-    {
-      "name":"UPS Installation",
-      "brand":"SERVICO",
-      "price": 10000,
-      "image":"ups.jpg"
-    },{
-      "name":"Wiring Change(Flat)",
-      "brand":"SERVICO",
-      "price": 5000,
-      "image":"wire.jpg"
-    },
-    {
-      "name":"Water Tank Installation",
-      "brand":"SERVICO",
-      "price": 6500,
-      "image":"tank.jpg"
-    },
-    {
-      "name":"Electric Motor Installation",
-      "brand":"SERVICO",
-      "price": 12000,
-      "image":"motor.jpg"
-    },
-    {
-      "name":"Meter Change",
-      "brand":"SERVICO",
-      "price":5000,
-      "image":"meter.jpg"
-    },
 
-  ];
 
   void getPostsData() {
 
@@ -103,6 +78,7 @@ class _PackagesState extends State<Packages> {
                   if(snapshot.connectionState == ConnectionState.waiting){
                     return Text("Loading");
                   }
+
                   final data = snapshot.requireData;
                   //print(data.docs[0]['Title']);
                   return Column(
@@ -144,45 +120,50 @@ class _PackagesState extends State<Packages> {
                                     child: Align(
                                         heightFactor: 0.7,
                                         alignment: Alignment.topCenter,
-                                        child: Container(
-                                            height: 150,
-                                            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20.0)), color: Colors.white, boxShadow: [
-                                              BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
-                                            ]),
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: <Widget>[
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Text(
-                                                        data.docs[index]['Title'],
-                                                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                                      ),
-                                                      Text(
-                                                        Package_data[index]["brand"],
-                                                        style: const TextStyle(fontSize: 13, color: Colors.grey),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                        "\Rs ${data.docs[index]["Price"]}",
-                                                        style: const TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Image.network(
-                                                    "${data.docs[index]["Image"]}",
-                                                    height: double.infinity,
-                                                    width: 100,
-                                                  )
-                                                ],
-                                              ),
-                                            ))
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => PkgBooking(auth: widget.auth,data: data,index: index)));
+                                          },
+                                          child: Container(
+                                              height: 150,
+                                              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20.0)), color: Colors.white, boxShadow: [
+                                                BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
+                                              ]),
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: <Widget>[
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          data.docs[index]['Title'],
+                                                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                                        ),
+                                                        Text(
+                                                            'SERVICO',
+                                                          style: const TextStyle(fontSize: 13, color: Colors.grey),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Text(
+                                                          "\Rs ${data.docs[index]["Price"]}",
+                                                          style: const TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Image.network(
+                                                      "${data.docs[index]["Image"]}",
+                                                      height: double.infinity,
+                                                      width: 100,
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                        )
 
                                     ),
                                   ),
